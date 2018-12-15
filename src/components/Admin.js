@@ -1,4 +1,8 @@
 import React from 'react'
-import { admin } from '../css/Switcher'
+import Link from 'redux-first-router-link'
 
-export default () => <div className={admin}>U FIGURED OUT HOW TO DO AUTH!</div>
+export default () =>
+  <div>
+    <h1>/admin</h1>
+    <Link to={{ type: 'router/HOME' }}>Go to /home</Link>
+  </div>

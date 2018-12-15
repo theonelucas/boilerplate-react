@@ -1,21 +1,5 @@
-export default (state = 'RFR Demo', action = {}) => {
-  switch (action.type) {
-    case 'HOME':
-      return 'RFR Demo'
-    case 'LIST':
-      return `RFR: ${capitalize(action.payload.category)}`
-    case 'VIDEO':
-      return `RFR: ${capitalize(action.payload.slug)}`
-    case 'LOGIN':
-      return 'RFR Login'
-    case 'ADMIN':
-      return 'RFR Admin'
-    default:
-      return state
-  }
-}
+import routesMap from '../routesMap';
+import routeActions from '../routeActions';
 
-const capitalize = str =>
-  str.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-
-// RFR automatically changes the document.title for you :)
+export default (state = routeActions.ROOT, action = {}) =>
+  (routesMap[action.type] || routeActions.ROOT).title || state;

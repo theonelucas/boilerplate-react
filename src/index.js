@@ -1,34 +1,46 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { AppContainer } from 'react-hot-loader'
-import App from './components/App'
-import configureStore from './configureStore'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { AppContainer } from 'react-hot-loader';
 
-const { store } = configureStore(window.REDUX_STATE)
-// To change basename, put there the second param:
-// const { store } = configureStore(window.REDUX_STATE, { basename: '/somewhere' })
+import App from './components/App';
+import rootSaga from './components/rootSagas';
+import configureStore from './configureStore';
 
-const render = App => {
-  const root = document.getElementById('root')
+const { store } = configureStore(window.REDUX_STATE);
 
+store.runSaga(rootSaga);
+
+/*
+  Just a wrapper around 'App' component to allow us to remove the server-side injected styled
+  Refer to: CSS https://github.com/cssinjs/jss/blob/master/docs/ssr.md
+*/
+class Main extends React.Component {
+  componentDidMount() {
+    const jssStyles = document.getElementById('jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }
+
+  render = () => <App />
+}
+
+const render = (App2) => {
   ReactDOM.hydrate(
     <AppContainer>
       <Provider store={store}>
-        <App />
+        <App2 />
       </Provider>
     </AppContainer>,
-    root
-  )
-}
+    document.getElementById('root')
+  );
+};
 
-render(App)
+render(Main);
 
 if (module.hot && process.env.NODE_ENV === 'development') {
   module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line
-    const App = require('./components/App').default
-
-    render(App)
-  })
+    render(require('./components/App').default); // eslint-disable-line global-require
+  });
 }

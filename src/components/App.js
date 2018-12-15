@@ -1,17 +1,31 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import DevTools from './DevTools'
-import Sidebar from './Sidebar'
-import Switcher from './Switcher'
+import UniversalComponent from '../UniversalComponent';
+import isLoadingSelect from '../selectors/isLoading';
 
-import styles from '../css/App'
+import Menu from './Menu/Menu';
 
-export default () =>
+const Switcher = ({ page, isLoading }) => (
   <div>
-    <div className={styles.app}>
-      <Sidebar />
-      <Switcher />
-    </div>
-
-    <DevTools />
+    <UniversalComponent page={page} isLoading={isLoading} />=
+    <Menu />
   </div>
+);
+
+Switcher.defaultProps = {
+  isLoading: false
+};
+
+Switcher.propTypes = {
+  page: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool
+};
+
+const mapState = ({ page, ...state }) => ({
+  page,
+  isLoading: isLoadingSelect(state)
+});
+
+export default connect(mapState)(Switcher);
