@@ -22,7 +22,7 @@ module.exports = {
         use: 'babel-loader'
       },
       {
-        test: /\.styl$/,
+        test: /\.css$/,
         use: [
           ExtractCssChunks.loader,
           {
@@ -31,9 +31,6 @@ module.exports = {
               modules: true,
               localIdentName: '[name]__[local]--[hash:base64:5]'
             }
-          },
-          {
-            loader: 'stylus-loader'
           }
         ]
       }

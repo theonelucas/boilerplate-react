@@ -1,13 +1,13 @@
-const fs = require('fs')
-const path = require('path')
-const webpack = require('webpack')
-const WriteFilePlugin = require('write-file-webpack-plugin')
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
-const res = p => path.resolve(__dirname, p)
+const res = p => path.resolve(__dirname, p);
 
-const nodeModules = res('../node_modules')
-const entry = res('../server/render.js')
-const output = res('../buildServer')
+const nodeModules = res('../node_modules'); // "/node_modules" when running with docker compose
+const entry = res('../server/render.js');
+const output = res('../buildServer');
 
 // if you're specifying externals to leave unbundled, you need to tell Webpack
 // to still bundle `react-universal-component`, `webpack-flush-chunks` and
@@ -19,7 +19,7 @@ const externals = fs
   .reduce((externals, mod) => {
     externals[mod] = `commonjs ${mod}`
     return externals
-  }, {})
+  }, {});
 
 externals['react-dom/server'] = 'commonjs react-dom/server'
 
@@ -47,7 +47,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'css-loader/locals',
+            loader: 'css-loader',
             options: {
               modules: true,
               localIdentName: '[name]__[local]--[hash:base64:5]'
@@ -71,4 +71,4 @@ module.exports = {
       }
     })
   ]
-}
+};

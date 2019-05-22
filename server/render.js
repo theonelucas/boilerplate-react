@@ -8,11 +8,10 @@ import { SheetsRegistry } from 'jss';
 import { flushChunkNames } from 'react-universal-component/server';
 
 import red from '@material-ui/core/colors/red';
-import green from '@material-ui/core/colors/green';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
 
 import App from '../src/components/App';
-import rootSaga from '../src/components/rootSagas';
+import rootSaga from '../src/sagas/rootSaga';
 import configureStore from './configureStore';
 
 export default ({ clientStats }) => async (req, res, next) => {
@@ -32,10 +31,13 @@ export default ({ clientStats }) => async (req, res, next) => {
   // Create a theme instance
   const theme = createMuiTheme({
     palette: {
-      primary: green,
+      primary: { main: '#fff' },
       accent: red,
       type: 'light'
     },
+    typography: {
+      useNextVariants: true
+    }
   });
 
   // Create a new class name generator
@@ -51,7 +53,7 @@ export default ({ clientStats }) => async (req, res, next) => {
     </JssProvider>
   );
 
-  store.runSaga(rootSaga).done.then(() => {
+  store.runSaga(rootSaga).toPromise().then(() => {
     const appString = ReactDOM.renderToString(rootComponent);
     const state = store.getState();
     const stateJson = JSON.stringify(state);

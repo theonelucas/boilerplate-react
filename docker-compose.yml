@@ -1,0 +1,10 @@
+version: '2.0'
+services:
+  web:
+    build: ./
+    volumes:
+        - .:/web
+    ports:
+        - "3000:3000"
+    restart: always
+    command: yarn start

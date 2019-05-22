@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
 import App from './components/App';
-import rootSaga from './components/rootSagas';
+import rootSaga from './sagas/rootSaga';
 import configureStore from './configureStore';
 
 const { store } = configureStore(window.REDUX_STATE);

@@ -27,7 +27,6 @@ yarn && yarn start
 
 ## Notes
 
-- Forked from https://github.com/ScriptedAlchemy/redux-first-router-demo.
 - This is a work in progress, fundamentals aspects of this project can and will change drastically.
 - The project structure follows (or at least tries to follow) the principles described in [this article](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1).
 
@@ -35,6 +34,12 @@ yarn && yarn start
 
 - Implement airbnb rules in ESLint.
 - Structure the project accordingly to [this article](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1).
+
+## Packages being considered
+
+- Formik
+- Apollo
+- Commitizen
 
 ## Contributing
 

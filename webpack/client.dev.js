@@ -39,7 +39,11 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+      {
+        test: /\.(gif|ico|jpg|jpeg|webp|json|png|svg|woff|woff2)$/,
+        loader: 'file-loader'
+      },
     ]
   },
   resolve: {

@@ -1,45 +1,44 @@
-import { NOT_FOUND } from 'redux-first-router'
-import configureStore from '../src/configureStore'
+import { NOT_FOUND } from 'redux-first-router';
+import configureStore from '../src/configureStore';
+import axios from 'axios';
 
 export default async (req, res) => {
-  // const jwToken = req.cookies.jwToken // see server/index.js to change jwToken
-  const preLoadedState = {} // onBeforeChange will authenticate using this
+  const preLoadedState = {};
+  const { store } = configureStore(preLoadedState, [req.path]);
+  let location = store.getState().location;
 
-  const { store } = configureStore(preLoadedState, [req.path])
-  // To change basename, add it to the options like so:
+  if (doesRedirect(location, res)) {
+    return false;
+  }
+
+  location = store.getState().location; // State has now changed
+
+  if (doesRedirect(location, res)) {
+    return false;
+  }
+
+  const status = location.type === NOT_FOUND ? 404 : 200;
+
   /*
-    const { store, thunk } = configureStore(preLoadedState, {
-    initialEntries: [req.path],
-    basename: '/'
-  })
-   */
+    If the current route being accessed was not found by redux-first-router,
+    try to get the corresponding long URL from back-end. If it is found,
+    then we redirect otherwise just show a 404 page
+  */
+  if (location.type === NOT_FOUND) {
+    // 'server' is the name of our back-end server in docker network
+    await axios.get(`http://server:3001/api${location.pathname}`, { timeout: 5000 })
+      .then((response) => doesRedirect({ kind: 'redirect', pathname: response.data.url }, res))
+  }
 
-  // if not using onBeforeChange + jwTokens, you can also async authenticate
-  // here against your db (i.e. using req.cookies.sessionId)
+  res.status(status);
 
-  let location = store.getState().location
-
-  if (doesRedirect(location, res)) return false
-
-  // using redux-thunk perhaps request and dispatch some app-wide state as well, e.g:
-  // await Promise.all([store.dispatch(myThunkA), store.dispatch(myThunkB)])
-
-  // await thunk(store) // THE PAYOFF BABY!
-
-  location = store.getState().location // remember: state has now changed
-  if (doesRedirect(location, res)) return false // only do this again if ur thunks have redirects
-
-  const status = location.type === NOT_FOUND ? 404 : 200
-
-  res.status(status)
-
-  return store
+  return store;
 }
 
 const doesRedirect = ({ kind, pathname }, res) => {
   if (kind === 'redirect') {
-    res.redirect(302, pathname)
+    res.redirect(302, pathname);
 
-    return true
+    return true;
   }
-}
+};

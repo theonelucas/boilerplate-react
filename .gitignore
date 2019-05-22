@@ -1,5 +1,3 @@
 node_modules
-*.log
-buildClient
 buildServer
-.idea
+buildClient

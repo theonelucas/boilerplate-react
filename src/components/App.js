@@ -3,29 +3,192 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import UniversalComponent from '../UniversalComponent';
-import isLoadingSelect from '../selectors/isLoading';
 
-import Menu from './Menu/Menu';
+import List from '@material-ui/core/List';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
+import Toolbar from '@material-ui/core/Toolbar';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-const Switcher = ({ page, isLoading }) => (
-  <div>
-    <UniversalComponent page={page} isLoading={isLoading} />=
-    <Menu />
-  </div>
-);
+import { mainListItems, secondaryListItems } from './MenuItems';
 
-Switcher.defaultProps = {
-  isLoading: false
-};
+const drawerWidth = 240;
+
+const styles = (theme) => ({
+  root: {
+    display: 'flex'
+  },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+    backgroundColor: '#fff'
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 36,
+    color: '#212121'
+  },
+  menuButtonHidden: {
+    display: 'none'
+  },
+  title: {
+    flexGrow: 1,
+    color: '#212121'
+  },
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    width: theme.spacing.unit * 7,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing.unit * 9
+    }
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: 0,
+    height: '100vh',
+    overflow: 'auto'
+  },
+  chartContainer: {
+    marginLeft: -22
+  },
+  tableContainer: {
+    height: 320
+  },
+  h5: {
+    marginBottom: theme.spacing.unit * 2
+  }
+});
+
+class Switcher extends React.PureComponent {
+  state = {
+    open: true
+  };
+
+  handleDrawerOpen = () => {
+    window.console.log('handleDrawerOpen');
+
+    this.setState({ open: true });
+  };
+
+  handleDrawerClose = () => {
+    window.console.log('handleDrawerClose');
+
+    this.setState({ open: false });
+  };
+
+  render() {
+    const { props } = this;
+
+    return (
+      <div className={props.classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="absolute"
+          className={`${props.classes.appBar} ${this.state.open ? props.classes.appBarShift : ''}`}
+        >
+          <Toolbar disableGutters={!this.state.open} className={props.classes.toolbar}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerOpen}
+              className={`${props.classes.menuButton} ${this.state.open ? props.classes.menuButtonHidden : ''}`}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              noWrap
+              className={props.classes.title}
+            >
+              App
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{ paper: `${props.classes.drawerPaper} ${!this.state.open ? props.classes.drawerPaperClose : ''}` }}
+          open={this.state.open}
+        >
+          <div className={props.classes.toolbarIcon}>
+            <IconButton onClick={this.handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+        </Drawer>
+        <main className={props.classes.content}>
+          <div className={props.classes.appBarSpacer} />
+          <UniversalComponent page={props.page} isLoading={props.isLoading} />
+        </main>
+      </div>
+    );
+  }
+}
 
 Switcher.propTypes = {
   page: PropTypes.string.isRequired,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  classes: PropTypes.shape({
+    toolbarIcon: PropTypes.string.isRequired,
+    drawerPaper: PropTypes.string.isRequired,
+    drawerPaperClose: PropTypes.string.isRequired,
+    root: PropTypes.string.isRequired,
+    appBar: PropTypes.string.isRequired,
+    appBarShift: PropTypes.string.isRequired,
+    toolbar: PropTypes.string.isRequired,
+    menuButton: PropTypes.string.isRequired,
+    menuButtonHidden: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
+  }).isRequired
 };
 
-const mapState = ({ page, ...state }) => ({
+const mapState = ({ page }) => ({
   page,
-  isLoading: isLoadingSelect(state)
+  isLoading: false
 });
 
-export default connect(mapState)(Switcher);
+export default connect(mapState)(withStyles(styles)(Switcher));
