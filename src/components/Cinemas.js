@@ -33,42 +33,42 @@ const GET_DATA = gql`
 }
 `;
 
-const styles = theme => ({
-  card: {
-    width: '230px',
-    margin: '15px',
-    display: 'inline-block',
-    fontFamily: `adobe-garamond-pro, serif`
-  },
-  wrapper: {
-    margin: '10px'
-  },
-  cardContent: {
-    padding: '0 !important'
-  },
-  artTitle: {
-    padding: '10px 10px 0 10px',
-    fontFamily: 'inherit',
-    height: '70px',
-    fontSize: '20px'
+const styles = () => ({
+  artCover: {
+    bottom: '-6px',
+    position: 'relative',
   },
   artDate: {
-    padding: '0 10px 10px 10px',
     fontFamily: 'inherit',
-    height: '30px'
+    height: '30px',
+    padding: '0 10px 10px 10px',
   },
   artPrice: {
-    padding: '0 10px 10px 10px',
     fontFamily: 'inherit',
-    fontSize: '22px'
+    fontSize: '22px',
+    padding: '0 10px 10px 10px',
   },
-  artCover: {
-    position: 'relative',
-    bottom: '-6px'
+  artTitle: {
+    fontFamily: 'inherit',
+    fontSize: '20px',
+    height: '70px',
+    padding: '10px 10px 0 10px',
+  },
+  card: {
+    display: 'inline-block',
+    fontFamily: 'adobe-garamond-pro, serif',
+    margin: '15px',
+    width: '230px',
+  },
+  cardContent: {
+    padding: '0 !important',
   },
   cardHeader: {
-    height: '130px'
-  }
+    height: '130px',
+  },
+  wrapper: {
+    margin: '10px',
+  },
 });
 
 const Cinemas = (props) => {
@@ -83,7 +83,7 @@ const Cinemas = (props) => {
         return (
           <div className={classes.wrapper}>
 
-            {data.artworks.map((artwork) =>
+            {data.artworks.map(artwork => (
               <Card className={classes.card} key={artwork.id}>
                 <CardContent className={classes.cardContent}>
                   <div className={classes.cardHeader}>
@@ -95,40 +95,36 @@ const Cinemas = (props) => {
                     src={artwork.image.image_url.replace(':version', 'square')}
                     title={artwork.displayLabel}
                     className={classes.artCover}
+                    alt={artwork.displayLabel}
                   />
                 </CardContent>
               </Card>
-            )}
+            ))}
           </div>
-        )
+        );
       }}
     </Query>
   );
-}
-
-Cinemas.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onSubmitUrl: PropTypes.func.isRequired,
-  url: PropTypes.shape({
-    value: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired
-  }).isRequired,
-  urlShortened: PropTypes.shape({
-    url: PropTypes.string.isRequired,
-    short: PropTypes.string.isRequired
-  }).isRequired,
-  loading: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = (state) => ({
+Cinemas.propTypes = {
+  classes: PropTypes.shape({}).isRequired,
+  url: PropTypes.shape({
+    error: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  }).isRequired,
+  urlShortened: PropTypes.shape({
+    short: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+const mapStateToProps = state => ({
+  loading: state.shortener.loading,
   url: state.shortener.url,
   urlShortened: state.shortener.urlShortened,
-  loading: state.shortener.loading
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmitUrl: () => dispatch(shortenUrl()),
-  onUrlChange: (newValue) => dispatch(urlFieldChanged(newValue))
-});
+const mapDispatchToProps = () => ({ });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Cinemas));

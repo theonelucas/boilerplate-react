@@ -1,7 +1,12 @@
 import { connectRoutes } from 'redux-first-router';
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
 import createSagaMiddleware, { END } from 'redux-saga';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import {
+  applyMiddleware,
+  combineReducers,
+  compose,
+  createStore,
+} from 'redux';
 
 import routesMap from './routesMap';
 
@@ -11,15 +16,19 @@ import * as actionCreators from './actions';
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
 
-const composeEnhancers = (...args) => // eslint-disable-line no-confusing-arrow
-  typeof window !== 'undefined'
-    ? composeWithDevTools({ actionCreators })(...args)
-    : compose(...args);
+const composeEnhancers = (...args) => (typeof window !== 'undefined'
+  ? composeWithDevTools({ actionCreators })(...args)
+  : compose(...args));
 
 export default (preLoadedState, initialEntries) => {
-  const { reducer, middleware, enhancer, initialDispatch } = connectRoutes(routesMap, {
+  const {
+    enhancer,
+    initialDispatch,
+    middleware,
+    reducer,
+  } = connectRoutes(routesMap, {
+    initialDispatch: false,
     initialEntries,
-    initialDispatch: false
   });
 
   middlewares.push(middleware);

@@ -1,3 +1,3 @@
-export const goHome = () => ({
-  type: 'router/ROOT'
+export default () => ({
+  type: 'router/ROOT',
 });

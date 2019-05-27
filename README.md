@@ -10,13 +10,18 @@ This is a boilerplate project in React utilizing [React Universal Component](htt
 - [Redux-Saga](https://github.com/redux-saga/redux-saga) *Fully implemented*
 - [Material-UI](https://github.com/mui-org/material-ui) *Fully implemented*
 - [Styled-Components](https://github.com/styled-components/styled-components) *Not implemented*
-- [Axios](https://github.com/axios/axios) *Not implemented*
-- Jest
+- [Axios](https://github.com/axios/axios) *Fully implemented*
+- [Jest](https://github.com/facebook/jest)
+- [Enzyme](https://github.com/airbnb/enzyme)
+- [Apollo](https://github.com/apollographql/react-apollo) *Fully implemented*
+- [Commitizen](https://github.com/commitizen/cz-cli)
+- [Formik](https://github.com/jaredpalmer/formik)
 
 ### Additionally, we use:
 
 - [Babel](https://github.com/babel/babel) (7.x) *Fully implemented*
 - [Webpack](https://github.com/webpack/webpack) (4.x) *Fully implemented*
+- [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 
 ## Usage
 
@@ -35,12 +40,6 @@ yarn && yarn start
 
 - Implement airbnb rules in ESLint.
 - Structure the project accordingly to [this article](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1).
-
-## Packages being considered
-
-- Formik
-- Apollo
-- Commitizen
 
 ## Contributing
 

@@ -1,3 +1,5 @@
-node_modules
-buildServer
 buildClient
+buildServer
+node_modules
+
+yarn-error.log

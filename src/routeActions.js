@@ -1,3 +1,3 @@
 export default {
-  ROOT: 'router/ROOT'
+  ROOT: 'router/ROOT',
 };

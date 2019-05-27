@@ -25,7 +25,9 @@ class Main extends React.Component {
     }
   }
 
-  render = () => <App />
+  render() {
+    return <App />;
+  }
 }
 
 const render = (App2) => {
@@ -37,7 +39,7 @@ const render = (App2) => {
         </Provider>
       </AppContainer>
     </ApolloProvider>,
-    document.getElementById('root')
+    document.getElementById('root'),
   );
 };
 
