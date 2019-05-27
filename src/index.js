@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
 import { AppContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
 
 import App from './components/App';
-import rootSaga from './sagas/rootSaga';
+import client from './graphql/client';
 import configureStore from './configureStore';
+import rootSaga from './sagas/rootSaga';
 
 const { store } = configureStore(window.REDUX_STATE);
 
@@ -28,11 +30,13 @@ class Main extends React.Component {
 
 const render = (App2) => {
   ReactDOM.hydrate(
-    <AppContainer>
-      <Provider store={store}>
-        <App2 />
-      </Provider>
-    </AppContainer>,
+    <ApolloProvider client={client}>
+      <AppContainer>
+        <Provider store={store}>
+          <App2 />
+        </Provider>
+      </AppContainer>
+    </ApolloProvider>,
     document.getElementById('root')
   );
 };

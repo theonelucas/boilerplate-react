@@ -1,18 +1,21 @@
+import JssProvider from 'react-jss/lib/JssProvider';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import uglifycss from 'uglifycss';
 import flushChunks from 'webpack-flush-chunks';
-import JssProvider from 'react-jss/lib/JssProvider';
+import uglifycss from 'uglifycss';
+import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { SheetsRegistry } from 'jss';
 import { flushChunkNames } from 'react-universal-component/server';
+import { getDataFromTree } from 'react-apollo';
 
 import red from '@material-ui/core/colors/red';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
 
 import App from '../src/components/App';
-import rootSaga from '../src/sagas/rootSaga';
 import configureStore from './configureStore';
+import rootSaga from '../src/sagas/rootSaga';
+import server from '../src/graphql/server';
 
 export default ({ clientStats }) => async (req, res, next) => {
   const store = await configureStore(req, res);
@@ -44,21 +47,29 @@ export default ({ clientStats }) => async (req, res, next) => {
   const generateClassName = createGenerateClassName();
 
   const rootComponent = (
-    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </MuiThemeProvider>
-    </JssProvider>
+    <ApolloProvider client={server}>
+      <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+        <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </MuiThemeProvider>
+      </JssProvider>
+    </ApolloProvider>
   );
 
-  store.runSaga(rootSaga).toPromise().then(() => {
+  Promise.all([
+    store.runSaga(rootSaga).toPromise(),
+    getDataFromTree(rootComponent)
+  ]).then(() => {
     const appString = ReactDOM.renderToString(rootComponent);
     const state = store.getState();
-    const stateJson = JSON.stringify(state);
     const chunkNames = flushChunkNames();
     const { js, styles, cssHash } = flushChunks(clientStats, { chunkNames });
+
+    // States for rehydratation on the client
+    const stateJson = JSON.stringify(state); // Redux
+    const apolloState = JSON.stringify(server.extract()); // Apollo
 
     // Grab the CSS from sheetsRegistry
     let css = sheetsRegistry.toString();
@@ -77,6 +88,7 @@ export default ({ clientStats }) => async (req, res, next) => {
         <html>
           <head>
             <meta charset="utf-8">
+            <link rel="stylesheet" href="https://use.typekit.net/kgn0frq.css">
             <title>${pageTitle}</title>
             ${styles}
             <style id="jss-server-side">${css}</style>
@@ -84,7 +96,10 @@ export default ({ clientStats }) => async (req, res, next) => {
           <body>
             <div id="root">${appString}</div>
           </body>
-          <script>window.REDUX_STATE = ${stateJson}</script>
+          <script>
+            window.REDUX_STATE = ${stateJson};
+            window.APOLLO_STATE = ${apolloState};
+          </script>
           ${js}
           ${cssHash}
         </html>`

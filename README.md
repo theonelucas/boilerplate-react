@@ -3,7 +3,7 @@
 
 This is a boilerplate project in React utilizing [React Universal Component](https://github.com/faceyspacey/react-universal-component) for SSR and code splitting plus+ all the packages you learned to love, like [Material-UI](https://github.com/mui-org/material-ui), [Redux-First Router](https://github.com/faceyspacey/redux-first-router) and [Redux-Saga](https://github.com/redux-saga/redux-saga).
 
-### Packages used:
+### Packages:
 
 - [Redux](https://github.com/reduxjs/redux) *Fully implemented*
 - [Redux-First Router](https://github.com/faceyspacey/redux-first-router) *Fully implemented*
@@ -11,6 +11,7 @@ This is a boilerplate project in React utilizing [React Universal Component](htt
 - [Material-UI](https://github.com/mui-org/material-ui) *Fully implemented*
 - [Styled-Components](https://github.com/styled-components/styled-components) *Not implemented*
 - [Axios](https://github.com/axios/axios) *Not implemented*
+- Jest
 
 ### Additionally, we use:
 

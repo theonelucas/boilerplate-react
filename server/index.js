@@ -14,6 +14,7 @@ const DEV = process.env.NODE_ENV === 'development';
 const { publicPath } = clientConfig.output;
 const outputPath = clientConfig.output.path;
 const app = express();
+const port = 3001;
 
 app.use(cookieParser());
 app.use(nofavicon());
@@ -24,11 +25,9 @@ if (DEV) {
 
   app.use(webpackDevMiddleware(multiCompiler, { publicPath, stats: { colors: true } }));
   app.use(webpackHotMiddleware(clientCompiler));
-  app.use(
-    webpackHotServerMiddleware(multiCompiler, {
-      serverRendererOptions: { outputPath }
-    })
-  );
+  app.use(webpackHotServerMiddleware(multiCompiler, {
+    serverRendererOptions: { outputPath }
+  }));
 } else {
   const clientStats = require('../buildClient/stats.json'); // eslint-disable-line global-require, import/no-unresolved
   const serverRender = require('../buildServer/main.js').default; // eslint-disable-line global-require, import/no-unresolved
@@ -37,4 +36,4 @@ if (DEV) {
   app.use(serverRender({ clientStats, outputPath }));
 }
 
-app.listen(3000, () => console.log('Listening on port 3000')); // eslint-disable-line no-console
+app.listen(port, () => console.log(`Listening on port ${port}`)); // eslint-disable-line no-console
