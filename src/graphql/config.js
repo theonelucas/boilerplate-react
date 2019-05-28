@@ -4,6 +4,6 @@ global.fetch = require('node-fetch'); // todo: Substitute this for axios
 
 export default {
   link: createHttpLink({
-    uri: 'https://metaphysics-production.artsy.net',
-  }),
+    uri: 'https://metaphysics-production.artsy.net'
+  })
 };

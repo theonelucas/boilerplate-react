@@ -1,3 +1,3 @@
 export default () => ({
-  type: 'router/ROOT',
+  type: 'router/ROOT'
 });

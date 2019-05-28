@@ -1,0 +1,30 @@
+fragment artwork on Artwork {
+  id
+  artist {
+    id
+    name
+  }
+  category
+  date
+  href
+  image {
+    image_versions
+    image_url
+  }
+  title
+  displayLabel
+  price
+  is_for_sale
+}
+
+query Artworks {
+ 	filter_artworks(
+    acquireable: true,
+    for_sale: true,
+    aggregations: INSTITUTION,
+  ) {
+    hits {
+      ...artwork
+    }
+  }
+}

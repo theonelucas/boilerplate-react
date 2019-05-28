@@ -6,7 +6,7 @@ import config from './config';
 const server = new ApolloClient({
   ...config,
   cache: new InMemoryCache(),
-  ssrMode: true,
+  ssrMode: true
 });
 
 export default server;

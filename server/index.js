@@ -1,8 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import '@babel/polyfill';
-import express from 'express';
-import webpack from 'webpack';
-import nofavicon from 'express-no-favicons';
+
 import cookieParser from 'cookie-parser';
+import express from 'express';
+import nofavicon from 'express-no-favicons';
+import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
@@ -36,4 +39,4 @@ if (DEV) {
   app.use(serverRender({ clientStats, outputPath }));
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}`)); // eslint-disable-line no-console
+app.listen(port, () => console.log(`🚀 Listening on port ${port}`)); // eslint-disable-line no-console

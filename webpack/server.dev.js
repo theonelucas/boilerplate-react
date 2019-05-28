@@ -1,3 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
+import { JSLoader, GQLoader, CSSProdLoader } from './loaders';
+
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -17,48 +21,25 @@ const externals = fs
   .readdirSync(nodeModules)
   .filter(x => !/\.bin|react-universal-component|webpack-flush-chunks/.test(x))
   .reduce((externals, mod) => {
-    externals[mod] = `commonjs ${mod}`
-    return externals
+    externals[mod] = `commonjs ${mod}`;
+    return externals;
   }, {});
 
-externals['react-dom/server'] = 'commonjs react-dom/server'
+externals['react-dom/server'] = 'commonjs react-dom/server';
 
 module.exports = {
-  name: 'server',
   devtool: 'source-map',
-  target: 'node',
-  mode: 'development',
   entry: ['regenerator-runtime/runtime.js', entry],
   externals,
-  output: {
-    path: output,
-    filename: '[name].js',
-    libraryTarget: 'commonjs2'
-  },
+  mode: 'development',
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'babel-loader'
-      },
-      {
-        test: /\.css/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              localIdentName: '[name]__[local]--[hash:base64:5]'
-            }
-          }
-        ]
-      }
-    ]
+    rules: [JSLoader, GQLoader, CSSProdLoader]
   },
-  resolve: {
-    extensions: ['.js', '.css', '.styl']
+  name: 'server',
+  output: {
+    filename: '[name].js',
+    libraryTarget: 'commonjs2',
+    path: output
   },
   plugins: [
     new WriteFilePlugin(),
@@ -70,5 +51,9 @@ module.exports = {
         NODE_ENV: JSON.stringify('development')
       }
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['.js', '.css', '.styl']
+  },
+  target: 'node'
 };

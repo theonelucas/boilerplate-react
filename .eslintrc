@@ -21,6 +21,7 @@
   ],
   "rules": {
     "react/jsx-filename-extension": 0,
-    "sort-keys": 2
+    "sort-keys": 2,
+    "comma-dangle": ["error", "never"]
   }
 }

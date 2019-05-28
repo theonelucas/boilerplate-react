@@ -5,7 +5,7 @@ import {
   applyMiddleware,
   combineReducers,
   compose,
-  createStore,
+  createStore
 } from 'redux';
 
 import routesMap from './routesMap';
@@ -25,10 +25,10 @@ export default (preLoadedState, initialEntries) => {
     enhancer,
     initialDispatch,
     middleware,
-    reducer,
+    reducer
   } = connectRoutes(routesMap, {
     initialDispatch: false,
-    initialEntries,
+    initialEntries
   });
 
   middlewares.push(middleware);

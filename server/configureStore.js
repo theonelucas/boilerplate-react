@@ -1,17 +1,28 @@
-import { NOT_FOUND } from 'redux-first-router';
-import configureStore from '../src/configureStore';
 import axios from 'axios';
+import { NOT_FOUND } from 'redux-first-router';
+
+import configureStore from '../src/configureStore';
+
+const doesRedirect = ({ kind, pathname }, res) => {
+  if (kind === 'redirect') {
+    res.redirect(302, pathname);
+
+    return true;
+  }
+
+  return false;
+};
 
 export default async (req, res) => {
   const preLoadedState = {};
   const { store } = configureStore(preLoadedState, [req.path]);
-  let location = store.getState().location;
+  let { location } = store.getState();
 
   if (doesRedirect(location, res)) {
     return false;
   }
 
-  location = store.getState().location; // State has now changed
+  ({ location } = store.getState()); // State has now changed
 
   if (doesRedirect(location, res)) {
     return false;
@@ -27,18 +38,10 @@ export default async (req, res) => {
   if (location.type === NOT_FOUND) {
     // 'server' is the name of our back-end server in docker network
     await axios.get(`http://server:3001/api${location.pathname}`, { timeout: 5000 })
-      .then((response) => doesRedirect({ kind: 'redirect', pathname: response.data.url }, res))
+      .then(response => doesRedirect({ kind: 'redirect', pathname: response.data.url }, res));
   }
 
   res.status(status);
 
   return store;
-}
-
-const doesRedirect = ({ kind, pathname }, res) => {
-  if (kind === 'redirect') {
-    res.redirect(302, pathname);
-
-    return true;
-  }
 };

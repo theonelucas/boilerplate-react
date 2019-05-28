@@ -11,7 +11,7 @@ const UniversalComponent = universal(determineHowToLoad, {
   error: NotFound,
   loading: Loading,
   minDelay: 1200,
-  onError: (error) => { throw error; },
+  onError: (error) => { throw error; }
 });
 
 UniversalComponent.propTypes = {
@@ -19,19 +19,19 @@ UniversalComponent.propTypes = {
   error: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.element,
-    PropTypes.bool,
+    PropTypes.bool
   ]),
   key: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   loading: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.element,
-    PropTypes.bool,
+    PropTypes.bool
   ]),
   loadingTransition: PropTypes.bool,
   minDelay: PropTypes.number,
   onError: PropTypes.func,
   onLoad: PropTypes.func,
-  timeout: PropTypes.number,
+  timeout: PropTypes.number
 };
 
 const loadComponent = file => universal(determineHowToLoad({ page: file }));

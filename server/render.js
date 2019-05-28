@@ -2,12 +2,11 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import flushChunks from 'webpack-flush-chunks';
-import uglifycss from 'uglifycss';
-import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { SheetsRegistry } from 'jss';
 import { flushChunkNames } from 'react-universal-component/server';
-import { getDataFromTree } from 'react-apollo';
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import uglifycss from 'uglifycss'; // eslint-disable-line import/no-extraneous-dependencies
 
 import red from '@material-ui/core/colors/red';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
@@ -17,7 +16,7 @@ import configureStore from './configureStore';
 import rootSaga from '../src/sagas/rootSaga';
 import server from '../src/graphql/server';
 
-export default ({ clientStats }) => async (req, res, next) => {
+export default ({ clientStats }) => async (req, res) => {
   const store = await configureStore(req, res);
 
   // No store means redirect was already served
@@ -34,8 +33,8 @@ export default ({ clientStats }) => async (req, res, next) => {
   // Create a theme instance
   const theme = createMuiTheme({
     palette: {
-      primary: { main: '#fff' },
       accent: red,
+      primary: { main: '#fff' },
       type: 'light'
     },
     typography: {
@@ -76,7 +75,7 @@ export default ({ clientStats }) => async (req, res, next) => {
 
     // Minify the CSS if we are on production mode
     if (process.env.NODE_ENV === 'production') {
-      css = uglifycss.processString();
+      css = uglifycss.processString(css);
     }
 
     // Try to get the page title based on current route
