@@ -17,11 +17,11 @@ fragment artwork on Artwork {
   is_for_sale
 }
 
-query Artworks {
+query ArtworksQuery {
  	filter_artworks(
     acquireable: true,
     for_sale: true,
-    aggregations: INSTITUTION,
+    aggregations: PRICE_RANGE,
   ) {
     hits {
       ...artwork

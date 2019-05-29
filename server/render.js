@@ -1,12 +1,13 @@
 import JssProvider from 'react-jss/lib/JssProvider';
 import React from 'react';
-import ReactDOM from 'react-dom/server';
-import flushChunks from 'webpack-flush-chunks';
+import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { SheetsRegistry } from 'jss';
-import { flushChunkNames } from 'react-universal-component/server';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import uglifycss from 'uglifycss'; // eslint-disable-line import/no-extraneous-dependencies
+
+import flushChunks from 'webpack-flush-chunks';
+import { flushChunkNames } from 'react-universal-component/server';
 
 import red from '@material-ui/core/colors/red';
 import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
@@ -61,7 +62,7 @@ export default ({ clientStats }) => async (req, res) => {
     store.runSaga(rootSaga).toPromise(),
     getDataFromTree(rootComponent)
   ]).then(() => {
-    const appString = ReactDOM.renderToString(rootComponent);
+    const appString = ReactDOMServer.renderToString(rootComponent);
     const state = store.getState();
     const chunkNames = flushChunkNames();
     const { js, styles, cssHash } = flushChunks(clientStats, { chunkNames });

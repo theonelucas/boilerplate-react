@@ -8,51 +8,15 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import Artworks from './query.gql';
+import ArtworksQuery from './query.gql';
 
-const styles = () => ({
-  artCover: {
-    bottom: '-6px',
-    position: 'relative'
-  },
-  artDate: {
-    fontFamily: 'inherit',
-    height: '30px',
-    padding: '0 10px 10px 10px'
-  },
-  artPrice: {
-    fontFamily: 'inherit',
-    fontSize: '22px',
-    padding: '0 10px 10px 10px'
-  },
-  artTitle: {
-    fontFamily: 'inherit',
-    fontSize: '20px',
-    height: '70px',
-    padding: '10px 10px 0 10px'
-  },
-  card: {
-    display: 'inline-block',
-    fontFamily: 'adobe-garamond-pro, serif',
-    margin: '15px',
-    width: '230px'
-  },
-  cardContent: {
-    padding: '0 !important'
-  },
-  cardHeader: {
-    height: '130px'
-  },
-  wrapper: {
-    margin: '10px'
-  }
-});
+import styles from './styles';
 
-const Cinemas = (props) => {
+const Artworks = (props) => {
   const { classes } = props;
 
   return (
-    <Query query={Artworks}>
+    <Query query={ArtworksQuery}>
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
@@ -77,6 +41,7 @@ const Cinemas = (props) => {
                 </CardContent>
               </Card>
             ))}
+
           </div>
         );
       }}
@@ -84,7 +49,7 @@ const Cinemas = (props) => {
   );
 };
 
-Cinemas.propTypes = {
+Artworks.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   url: PropTypes.shape({
     error: PropTypes.string.isRequired,
@@ -104,4 +69,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = () => ({ });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Cinemas));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Artworks));
